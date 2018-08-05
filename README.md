@@ -28,7 +28,7 @@ If we look at our State data we will see that we have 3 independent components. 
 
 
 ## The code. 
-There are 2 source files, couple of .jpg files to make it pretty and weight file if you do not want to train from scracth. PRESE ESC button when training your netwrok to exit. Then it will save weights for next time.
+There are 2 source files, couple of .jpg files to make it pretty and weight file if you do not want to train from scracth. Press ESC button when training your netwrok to exit. Then it will save weights for next time.
 main.py is the game and NeuralNet.py is the network.
 
 ## Problems. 
