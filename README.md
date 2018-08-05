@@ -17,7 +17,7 @@ Also, we do not want to have 0 (zeroes) in our state. Zeroes are bad since any w
 ## Reward.
 1. By default reward = 0. 
 2. If we became closer to apple reward = 1 if further from apple reward = -1
-3. if we are the apple reward = 1. (Pretty much same as we just become closer to apple). We might want to increase it but practice showed that it's not needed
+3. if we ate the apple reward = 1. (Pretty much same as we just become closer to apple). We might want to increase it but practice showed that it's not needed
 4. If we hit ourself reward = -10
 5. If we hit the wall reward = -10.
 
