@@ -36,3 +36,7 @@ Our network doing very good at getting those apples and not hitting wals.<br>
 Problem is that sometimes Snake would try to cross itself when going for an apple. Ideally it should not cross itself untill it boxed itself in. 
 My theory is that network gets 15-20 succesfull moves by getting closer to apple and only 1 bad move when it hits itself. So Network learned quickly how to get an apple and more training needed for Network to learn not to cross itself. Another solution might be to start penalizing for getting closer to own body.
 
+## Resume
+If we just go by reward rules we do not need a Neutral Network. The code would be faster and easier but i wanted to get familiar with Deep Q-Learning, hence this project.
+Also i learened that correctly choosen State and Reward plays a big role in how succesfull network will be. Just for experiment sake i want to add the "amount" of snake in each direction from the head. Hopping to neural netwrok to learn not to go to areas where it runs a chance of boxing itself in. 
+
