@@ -7,11 +7,11 @@ Also we need to define a reward. When AI makes a move the state changes and we e
 I found good explanation of "deep Q-learning" here: https://keon.io/deep-q-learning/
 
 ## State.
-We need to feed our neutral network some data. We are going to supply 12 numbers.
-Snake can move in 4 directions Right, Down, Left, Up.
-First 4 are a distances between snake's head and apple in each direction.
-Second 4 are distances between snake's head and wall in each direction.
-Thrid 4 are distances between snake's head and snake itself (closed piece of tail) in each direction.
+We need to feed our neutral network some data. We are going to supply 12 numbers.<br>
+Snake can move in 4 directions Right, Down, Left, Up.<br>
+First 4 are a distances between snake's head and apple in each direction.<br>
+Second 4 are distances between snake's head and wall in each direction.<br>
+Thrid 4 are distances between snake's head and snake itself (closed piece of tail) in each direction.<br>
 
 Also, we do not want to have 0 (zeroes) in our state. Zeroes are bad since any weight multiply by 0 will be 0. And we do not want big numbers either. So we will normalize out state by adding 0.01 (avoiding 0) and divide distance by boardisze. 
 ## Reward.
