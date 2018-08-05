@@ -13,7 +13,7 @@ First 4 are a distances between snake's head and apple in each direction.<br>
 Second 4 are distances between snake's head and wall in each direction.<br>
 Thrid 4 are distances between snake's head and snake itself (closed piece of tail) in each direction.<br>
 
-Also, we do not want to have 0 (zeroes) in our state. Zeroes are bad since any weight multiply by 0 will be 0. And we do not want big numbers either. So we will normalize out state by adding 0.01 (avoiding 0) and divide distance by boardisze. 
+Also, we do not want to have 0 (zeroes) in our state. Zeroes are bad since any weight multiply by 0 will be 0. And we do not want big numbers either. So we will normalize out state by adding 0.01 (avoiding 0) and divide distances by boardisze. 
 ## Reward.
 1. By default reward = 0. 
 2. If we became closer to apple reward = 1 if further from apple reward = -1
