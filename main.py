@@ -9,6 +9,11 @@ import numpy as np
 step = 44
 boardSize = 20
 
+LEFT = 0
+DOWN=1
+RIGHT = 2
+UP=3
+
 def isCollision(x1, y1, x2, y2):
     if x1 == x2 and y1 == y2:
         return True
@@ -168,8 +173,8 @@ class Game:
 
         if distanceToApple > distanceToAppleNew:
             reward = 1.0
-        if distanceToApple < distanceToAppleNew:
-            reward = -1.0
+        #if distanceToApple < distanceToAppleNew:
+        #    reward = -1.0
 
         if iResult == 1:
             self.apple.assignPosition(surface, self.player) #we ate apple, assign new position
@@ -178,7 +183,7 @@ class Game:
             #bGameEnded = 2  # we got ultimate reward but we do not want to reset the game
 
         if iResult == -2:
-            print("we the wall")
+            print("we hit the wall")
             reward = -10.0 #we hit ourself
             bGameEnded = 1  # game has ended, reset the game
 
@@ -200,47 +205,48 @@ class Game:
         #directions go 0 going right, 1 - going down, 2 - going left, 3 - going up
         state = [0]*12
         #First 4
-        state[0 + 0] = self.apple.x - self.player.x[0]
-        state[0 + 1] = self.apple.y - self.player.y[0]
-        state[0 + 2] = self.player.x[0] - self.apple.x
-        state[0 + 3] = self.player.y[0] - self.apple.y
+        state[0 + RIGHT] = self.apple.x - self.player.x[0]
+        state[0 + DOWN] = self.apple.y - self.player.y[0]
+        state[0 + LEFT] = self.player.x[0] - self.apple.x
+        state[0 + UP] = self.player.y[0] - self.apple.y
 
-        if state[0 + 0] < 0:
-            state[0 + 0] = 2*boardSize
-        if state[0 + 1] < 0:
-            state[0 + 1] = 2*boardSize
-        if state[0 + 2] < 0:
-            state[0 + 2] = 2*boardSize
-        if state[0 + 3] < 0:
-            state[0 + 3] = 2*boardSize
+        #if we got negative value then apple is not in that direction. Set value to double board size
+        if state[0 + RIGHT] < 0:
+            state[0 + RIGHT] = 2*boardSize
+        if state[0 + DOWN] < 0:
+            state[0 + DOWN] = 2*boardSize
+        if state[0 + LEFT] < 0:
+            state[0 + LEFT] = 2*boardSize
+        if state[0 + UP] < 0:
+            state[0 + UP] = 2*boardSize
         #Second 4
-        state[4 + 0] = boardSize - self.player.x[0] - 1 #distance 0  when we next to the right wall
-        state[4 + 1] = boardSize - self.player.y[0] - 1  # distance 0  when we next to the bottom wall
-        state[4 + 2] = self.player.x[0] #distance 0 when we next to the left wall
-        state[4 + 3] = self.player.y[0]  # distance 0 when we next to the top wall
+        state[4 + RIGHT] = boardSize - self.player.x[0] - 1 #distance 0  when we next to the right wall
+        state[4 + DOWN] = boardSize - self.player.y[0] - 1  # distance 0  when we next to the bottom wall
+        state[4 + LEFT] = self.player.x[0] #distance 0 when we next to the left wall
+        state[4 + UP] = self.player.y[0]  # distance 0 when we next to the top wall
         #Third 4
         #initialize values to something big since we are looking for minimal distance
-        state[8 + 0] = boardSize
-        state[8 + 1] = boardSize
-        state[8 + 2] = boardSize
-        state[8 + 3] = boardSize
+        state[8 + RIGHT] = 2*boardSize
+        state[8 + DOWN] = 2*boardSize
+        state[8 + LEFT] = 2*boardSize
+        state[8 + UP] = 2*boardSize
 
         for i in range(1, self.player.length):
             #make sure head and the tail's piece is on the same Y axle
             if self.player.y[i] == self.player.y[0]:
                 #check if tail's piece on a left or on a right and set appropriate distance in that direction
                 if self.player.x[i] > self.player.x[0]:
-                    state[8 + 0] = min(state[8 + 0], self.player.x[i] - self.player.x[0])
+                    state[8 + RIGHT] = min(state[8 + RIGHT], self.player.x[i] - self.player.x[0])
                 else:
-                    state[8 + 2] = min(state[8 + 2], self.player.x[0] - self.player.x[i])
+                    state[8 + LEFT] = min(state[8 + LEFT], self.player.x[0] - self.player.x[i])
 
             #make sure head and the tail's piece is on the same X axle then get the minimum
             if self.player.x[i] == self.player.x[0]:
                 # check if tail's piece above or bellow and set appropriate distance in that direction
                 if self.player.y[i] > self.player.y[0] :
-                    state[8 + 1] = min(state[8 + 1], self.player.y[i] - self.player.y[0])
+                    state[8 + DOWN] = min(state[8 + DOWN], self.player.y[i] - self.player.y[0])
                 else:
-                    state[8 + 3] = min(state[8 + 3], self.player.y[0] - self.player.y[i])
+                    state[8 + UP] = min(state[8 + UP], self.player.y[0] - self.player.y[i])
 
         #we want to normalize state, make it between 0 and 1 but we do not want 0 so we are adding 0.01
         for i in range(12):
@@ -275,22 +281,25 @@ class App:
         agent = DQNAgent(state_size, 4)
         batch_size = 32
         state = self.game.getGamesState()
+        #we need to reshape state to format keras expects it in.
         state = np.reshape(state, [1, state_size])
 
         while self._running:
             pygame.event.pump()
             keys = pygame.key.get_pressed()
-            if keys[K_RIGHT]:
-                self.game.setDirection(0)
 
-            if keys[K_LEFT]:
-                self.game.setDirection(2)
 
-            if keys[K_UP]:
-                self.game.setDirection(3)
+            #if keys[K_RIGHT]:
+            #    self.game.setDirection(0)
 
-            if keys[K_DOWN]:
-                self.game.setDirection(1)
+            #if keys[K_LEFT]:
+            #    self.game.setDirection(2)
+
+            #if keys[K_UP]:
+            #    self.game.setDirection(3)
+
+            #if keys[K_DOWN]:
+            #    self.game.setDirection(1)
 
             if keys[K_ESCAPE]:
                 agent.save()
@@ -309,7 +318,7 @@ class App:
                 agent.replay(batch_size)
 
             if done == 1:
-                #we lost reinitialize board
+                #we lost, reinitialize board
                 self.game.initBoard(self._display_surf)
                 state = self.game.getGamesState()
                 state = np.reshape(state, [1, state_size])
