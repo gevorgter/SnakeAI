@@ -147,6 +147,7 @@ class Game:
     player = None
     apple = None
     iStep = 0
+
     MaxAmountOfSteps = 260
 
     def __init__(self):
@@ -166,32 +167,37 @@ class Game:
     def step(self, surface):
         bGameEnded = 0
         reward = 0.0
+        self.step = self.step + 1
+        if self.step < self.MaxAmountOfSteps:
+            distanceToApple =  abs(self.apple.x - self.player.x[0]) +abs(self.apple.y - self.player.y[0])
+            iResult = self.player.step(surface, self.apple)
+            distanceToAppleNew = abs(self.apple.x - self.player.x[0]) +abs(self.apple.y - self.player.y[0])
 
-        distanceToApple =  abs(self.apple.x - self.player.x[0]) +abs(self.apple.y - self.player.y[0])
-        iResult = self.player.step(surface, self.apple)
-        distanceToAppleNew = abs(self.apple.x - self.player.x[0]) +abs(self.apple.y - self.player.y[0])
+            if distanceToApple > distanceToAppleNew:
+                reward = 1.0
+                self.step = 0 #reset step amount
+            #if distanceToApple < distanceToAppleNew:
+            #    reward = -1.0
 
-        if distanceToApple > distanceToAppleNew:
-            reward = 1.0
-        #if distanceToApple < distanceToAppleNew:
-        #    reward = -1.0
+            if iResult == 1:
+                self.apple.assignPosition(surface, self.player) #we ate apple, assign new position
+                print("Snake length: " + str(self.player.length))
+                reward = 1.0
+                #bGameEnded = 2  # we got ultimate reward but we do not want to reset the game
 
-        if iResult == 1:
-            self.apple.assignPosition(surface, self.player) #we ate apple, assign new position
-            print("Snake length: " + str(self.player.length))
-            reward = 1.0
-            #bGameEnded = 2  # we got ultimate reward but we do not want to reset the game
+            if iResult == -2:
+                print("we hit the wall")
+                reward = -60.0 #we hit ourself
+                bGameEnded = 1  # game has ended, reset the game
 
-        if iResult == -2:
-            print("we hit the wall")
-            reward = -10.0 #we hit ourself
-            bGameEnded = 1  # game has ended, reset the game
-
-        if iResult == -3:
-            print("we hit ourself")
-            reward = -10.0 #we hit the wall
-            bGameEnded = 1  # game has ended, reset the game
-
+            if iResult == -3:
+                print("we hit ourself")
+                reward = -60.0 #we hit the wall
+                bGameEnded = 1  # game has ended, reset the game
+        else:
+            #looks like we looping. End the game.
+            reward = -10
+            bGameEnded = 1
         return self.getGamesState(), reward, bGameEnded
 
     def setDirection(self, iDir):
