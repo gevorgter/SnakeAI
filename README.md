@@ -16,7 +16,7 @@ Thrid 4 are distances between snake's head and snake itself (closed piece of tai
 Also, we do not want to have 0 (zeroes) in our state. Zeroes are bad since any weight multiply by 0 will be 0. And we do not want big numbers either. So we will normalize out state by adding 0.01 (avoiding 0) and divide distances by boardisze. 
 ## Reward.
 1. By default reward = 0. 
-2. If we became closer to apple reward = 1 if further from apple reward = -1
+2. If we became closer to apple reward = 1. We will not punish ourself to become further from the wall. I discovered that if we do the snake going to try to cross itself in order to get closer to apple rathen than go around.
 3. if we ate the apple reward = 1. (Pretty much same as we just become closer to apple). We might want to increase it but practice showed that it's not needed
 4. If we hit ourself reward = -10
 5. If we hit the wall reward = -10.
