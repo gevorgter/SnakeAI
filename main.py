@@ -167,15 +167,15 @@ class Game:
     def step(self, surface):
         bGameEnded = 0
         reward = 0.0
-        self.step = self.step + 1
-        if self.step < self.MaxAmountOfSteps:
+        self.iStep = self.iStep + 1
+        if self.iStep < self.MaxAmountOfSteps:
             distanceToApple =  abs(self.apple.x - self.player.x[0]) +abs(self.apple.y - self.player.y[0])
             iResult = self.player.step(surface, self.apple)
             distanceToAppleNew = abs(self.apple.x - self.player.x[0]) +abs(self.apple.y - self.player.y[0])
 
             if distanceToApple > distanceToAppleNew:
                 reward = 1.0
-                self.step = 0 #reset step amount
+                self.iStep = 0 #reset step amount
             #if distanceToApple < distanceToAppleNew:
             #    reward = -1.0
 
