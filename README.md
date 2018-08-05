@@ -28,10 +28,10 @@ If we look at our State data we will see that we have 3 independent components. 
 
 
 ## The code. 
-There are 2 source file, couple of graphics to make it pretty and weight file if you do not want to train from scracth.
+There are 2 source files, couple of .jpg files to make it pretty and weight file if you do not want to train from scracth.
 main.py is the game and NeuralNet.py is the network.
 
 ## Problems. 
-Our network doing very good at getting those apples and not hitting wals. 
+Our network doing very good at getting those apples and not hitting wals.<br>
 Problem is that Snake would try to cross itself when going for an apple. My theory is that network gets 15-20 succesfull moves by getting closer to apple and only 1 bad move when it hits itself. So Network learned quickly how to get an apple and more training needed for Network to learn not to cross itself. Another solution might be to start penalizing for getting closer to own body.
 
